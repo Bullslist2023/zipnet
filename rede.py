@@ -1,16 +1,22 @@
-import subprocess
+from system_utils import executar_comando
 
 def flush_dns():
-    subprocess.run(["ipconfig", "/flushdns"])
+    return executar_comando(
+        "ipconfig /flushdns",
+        "systemd-resolve --flush-caches",
+        "dscacheutil -flushcache"
+    )
 
 def renew_ip():
-    subprocess.run(["ipconfig", "/release"])
-    subprocess.run(["ipconfig", "/renew"])
+    return executar_comando(
+        "ipconfig /renew",
+        "dhclient",
+        None
+    )
 
 def ping():
-    result = subprocess.run(["ping", "-n", "1", "google.com"], capture_output=True, text=True)
-
-    for linha in result.stdout.split("\n"):
-        if "tempo=" in linha:
-            return linha.split("tempo=")[-1].replace("ms", "").strip()
-    return "Erro"
+    return executar_comando(
+        "ping google.com -n 4",
+        "ping -c 4 google.com",
+        "ping -c 4 google.com"
+    )
