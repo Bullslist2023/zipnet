@@ -55,8 +55,12 @@ def botao(label, func, tipo="default"):
 
     if st.button(label):
         with st.spinner("Executando..."):
-            executar_com_progresso([(label, func)])
+            resultado = func()  # 👈 agora captura retorno da função
+
             st.success(f"{label} concluído!")
+
+            if resultado:
+                st.info(resultado)  # 👈 mostra resposta (erro ou sucesso)
 
     if tipo in ["green", "yellow"]:
         st.markdown('</div>', unsafe_allow_html=True)
