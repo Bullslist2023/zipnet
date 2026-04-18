@@ -6,6 +6,10 @@
 import platform 
 import psutil
 import wmi
+if platform.system() == 'Windows':
+    import wmi
+else:
+    wmi = None
 # Traz estas informações, mas com a Biblioteca "psutil", temos informações detalhadas como RAM, Tecnologia de uso (DDR), e Frequência. CPU e Disco que estão sendo usados.
 def get_windows_info():
     info = {}
