@@ -197,9 +197,9 @@ with abas[4]:
         botao("🔧 Verificar e substituir arquivos corrompidos do Windows", sfc)
 
     with col2:
-        botao("🛠 Reparar Imagem do Windows usando o Windows Update", dism)
-
-    st.info("O que é Imagem do Windows? Uma cópia exata de tudo no Hard Disk. É como uma "Foto do estado atual" do Sistema Operacional. Podendo ser utilizado em caso de formatação.")
+        botao("🛠 Reparar Imagem do Windows usando o Windows Update", dism)    
+        
+    st.info("O que é Imagem do Windows? Uma cópia exata de tudo no Hard Disk. É como uma Foto do estado atual do Sistema Operacional. Podendo ser utilizado em caso de formatação.")
     st.info("Nesta sessão de conteúdos Avançados temos as ações SFC e DISM, ambas são ferramentas nativas do Windows para reparação do Sistema Operacional.")
     st.info("A forma correta de execução: Verifica e substitui arquivos corrompidos, e em seguida executa a Reparação  de Imagem do Windows!")
     st.info("Enquanto o SFC verifica arquivos essenciais do Windows, detecta Corrupção ou alterações e substitui automaticamente por versões corretas. O DISM repara a imagem do Windows, baixa arquivos corretos da Internet (Ou usa a mídia de instalação local) e permite que o SFC funcione corretamente depois.")
