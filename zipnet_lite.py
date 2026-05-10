@@ -194,15 +194,18 @@ with abas[4]:
     col1, col2 = st.columns(2)
 
     with col1:
-        botao("🔧 Rodar SFC", sfc)
+        botao("🔧 Verificar e substituir arquivos corrompidos do Windows", sfc)
 
     with col2:
-        botao("🛠 Rodar DISM", dism)
+        botao("🛠 Reparar Imagem do Windows usando o Windows Update", dism)
 
+    st.info("O que é Imagem do Windows? Uma cópia exata de tudo no Hard Disk. É como uma "Foto do estado atual" do Sistema Operacional. Podendo ser utilizado em caso de formatação.")
     st.info("Nesta sessão de conteúdos Avançados temos as ações SFC e DISM, ambas são ferramentas nativas do Windows para reparação do Sistema Operacional.")
+    st.info("A forma correta de execução: Verifica e substitui arquivos corrompidos, e em seguida executa a Reparação  de Imagem do Windows!")
     st.info("Enquanto o SFC verifica arquivos essenciais do Windows, detecta Corrupção ou alterações e substitui automaticamente por versões corretas. O DISM repara a imagem do Windows, baixa arquivos corretos da Internet (Ou usa a mídia de instalação local) e permite que o SFC funcione corretamente depois.")
     st.info("Por fim, o comando DISM conserta a fonte dos arquivos e o SFC conserta os arquivos em uso. Juntos restauram o sistema operacional para um estado saudável! Use apenas em casos emergentes, a ordem de uso é a ferramenta DISM em primeiro e o SFC por último.")
     st.info("Impacta na estabilidade do sistema, tempo de resposta, travamentos e bugs, e em alguns casos na inicialização do sistema operacional!")
+    
 
     st.markdown('</div>', unsafe_allow_html=True)
 
