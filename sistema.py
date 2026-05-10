@@ -1,45 +1,222 @@
 import streamlit as st
-import streamlit.components.v1 as components
 
 
-def user_info_html():
+# =========================
+# MOTOR DE DIAGNÓSTICO - Anamnese do Usuário
+# =========================
+def diagnostico(respostas):
 
-    return """
-    <html>
-    <body style="font-family:Arial;">
+    problema = respostas["problema"]
+    inicio = respostas["inicio"]
+    impacto = respostas["impacto"]
+    conexao = respostas["conexao"]
+    tempo_uso = respostas["tempo_uso"]
 
-    <h3>📊 Informações do seu dispositivo</h3>
+    acoes = []
+    info_extra = []
 
-    <p id="os"></p>
-    <p id="browser"></p>
-    <p id="screen"></p>
-    <p id="lang"></p>
-    <p id="tz"></p>
+    # =========================
+    # LENTIDÃO
+    # =========================
+    if problema == "Lentidão":
 
-    <script>
+        acoes += [
+            "🧹 Limpar arquivos temporários do sistema",
+            "🌐 Executar flush DNS",
+            "🔄 Reiniciar navegador ou sistema"
+        ]
 
-        document.getElementById("os").innerHTML =
-            "🖥 Sistema: " + navigator.platform;
+        if impacto == "Sistema todo lento":
 
-        document.getElementById("browser").innerHTML =
-            "🌐 Navegador: " + navigator.userAgent;
+            acoes += [
+                "🛠 Executar SFC /scannow",
+                "🧩 Executar DISM RestoreHealth",
+                "💽 Verificar disco (chkdsk /scan)"
+            ]
 
-        document.getElementById("screen").innerHTML =
-            "📺 Resolução: " + screen.width + "x" + screen.height;
+    # =========================
+    # INTERNET
+    # =========================
+    if problema == "Internet":
 
-        document.getElementById("lang").innerHTML =
-            "🌍 Idioma: " + navigator.language;
+        acoes += [
+            "🌐 Reset de rede (Winsock)",
+            "🔄 Renovar IP",
+            "🧠 Flush DNS"
+        ]
 
-        document.getElementById("tz").innerHTML =
-            "⏰ Fuso: " + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    # =========================
+    # TRAVAMENTOS
+    # =========================
+    if problema == "Travamentos":
 
-    </script>
+        acoes += [
+            "🛠 Executar SFC /scannow",
+            "🧩 Executar DISM RestoreHealth",
+            "💽 Verificar disco",
+            "🧠 Verificar uso de memória (RAM)"
+        ]
 
-    </body>
-    </html>
-    """
+    # =========================
+    # INÍCIO DO PROBLEMA
+    # =========================
+    if inicio == "Após atualização recente":
+
+        acoes.append(
+            "🔄 Restaurar estabilidade do sistema (SFC + DISM)"
+        )
+
+    # =========================
+    # CONEXÃO
+    # =========================
+    if conexao == "Wi-Fi instável":
+
+        acoes.append(
+            "📡 Reiniciar roteador/modem"
+        )
+
+    # =========================
+    # TEMPO SEM REINICIAR
+    # =========================
+    if tempo_uso == "Mais de 3 dias":
+
+        acoes.insert(
+            0,
+            "🔄 REINICIAR O COMPUTADOR (alta prioridade)"
+        )
+
+        info_extra.append("""
+🔄 IMPORTANTE:
+
+REINICIAR NÃO é o mesmo que desligar e ligar.
+
+• REINICIAR:
+  - Reinicia completamente o Windows
+  - Reinicia serviços do sistema
+  - Limpa memória (RAM)
+  - Resolve travamentos e lentidão
+
+• DESLIGAR/LIGAR:
+  - Pode usar "Inicialização Rápida (Fast Startup)"
+  - Parte do sistema pode ser restaurada de estado salvo
+  - Nem sempre limpa processos travados
+
+💡 Para diagnóstico técnico, REINICIAR é mais eficaz.
+""")
+
+    elif tempo_uso == "1 a 3 dias" and problema == "Lentidão":
+
+        info_extra.append(
+            "💡 Recomenda-se reiniciar o sistema para liberar memória acumulada."
+        )
+
+    return acoes, info_extra
 
 
-st.title("Diagnóstico do Usuário")
+# =========================
+# INTERFACE STREAMLIT
+# =========================
+def app():
 
-components.html(user_info_html(), height=300)
+    st.title("🧠 Diagnóstico Guiado do Sistema")
+
+    st.write(
+        "Responda às perguntas abaixo para receber "
+        "soluções automáticas e orientadas."
+    )
+
+    # =========================
+    # PERGUNTA 1
+    # =========================
+    problema = st.selectbox(
+        "1️⃣ Qual problema você está enfrentando?",
+        [
+            "Lentidão",
+            "Internet",
+            "Travamentos"
+        ]
+    )
+
+    # =========================
+    # PERGUNTA 2
+    # =========================
+    inicio = st.selectbox(
+        "2️⃣ Quando o problema começou?",
+        [
+            "Hoje / recentemente",
+            "Após atualização recente",
+            "Não sei"
+        ]
+    )
+
+    # =========================
+    # PERGUNTA 3
+    # =========================
+    impacto = st.selectbox(
+        "3️⃣ O problema afeta:",
+        [
+            "Apenas um aplicativo",
+            "Alguns programas",
+            "Sistema todo lento"
+        ]
+    )
+
+    # =========================
+    # PERGUNTA 4
+    # =========================
+    conexao = st.selectbox(
+        "4️⃣ Como está sua conexão de internet?",
+        [
+            "Normal",
+            "Lenta",
+            "Wi-Fi instável",
+            "Sem internet"
+        ]
+    )
+
+    # =========================
+    # PERGUNTA 5 (NOVA)
+    # =========================
+    tempo_uso = st.selectbox(
+        "5️⃣ Há quanto tempo você não reinicia o computador?",
+        [
+            "Hoje / recentemente",
+            "1 a 3 dias",
+            "Mais de 3 dias",
+            "Não sei"
+        ]
+    )
+
+    # =========================
+    # EXECUÇÃO
+    # =========================
+    if st.button("🔎 Gerar diagnóstico"):
+
+        respostas = {
+            "problema": problema,
+            "inicio": inicio,
+            "impacto": impacto,
+            "conexao": conexao,
+            "tempo_uso": tempo_uso
+        }
+
+        acoes, info_extra = diagnostico(respostas)
+
+        st.subheader("💡 Ações recomendadas:")
+
+        for acao in acoes:
+            st.write(acao)
+
+        if info_extra:
+
+            st.subheader("ℹ️ Informações importantes:")
+
+            for info in info_extra:
+                st.info(info)
+
+
+# =========================
+# EXECUÇÃO
+# =========================
+if __name__ == "__main__":
+    app()
