@@ -67,7 +67,7 @@ def botao(label, func, tipo="default"):
 # ABAS
 abas = st.tabs([
     "📘 Como funciona",
-    "🧠 Diagnóstico Guiado",
+    "🧠 Anamnese Guiada",
     "🧹 Limpeza",
     "🌐 Rede",
     "⚙️ Avançado"
@@ -78,10 +78,11 @@ abas = st.tabs([
 # =====================
 with abas[0]:
     st.markdown('<div class="section">', unsafe_allow_html=True)
-    st.info("Use os botões para executar ações de manutenção no seu computador.")
-    st.info("O ZIPNET - Sistema de Suporte ao Usuário (SSU) é um projeto responsável pelo auxílio a pessoas com conhecimento básico em Informática!")
-    st.info("Suas funções incluem Auxílio que ajudam desde o básico em desempenho de máquina através de: Limpeza de Arquivos Temporários, Logs, e Lixeira á Ajustes de conexão a Rede Internet com Reinício de Cache DNS, e até mesmo Manutenção avançada usando comandos DISM. Para quem deseja ir mais além, também oferecemos auxílio com verificação de informações simples de configuração de Hardware ao usuário!")
-    st.info("O projeto atualmente encontra-se em estado Alfa (Testes Internos), é um desenvolvimento responsável com único intuito de ajudar as pessoas a solucionarem seus problemas diários, oferecendo otimização e solução prático em minutos de uso!!")
+    st.info("🫱🏻‍🫲🏽 Use os botões para executar ações de manutenção no seu computador.")
+    st.info("🌎 O ZIPNET - Sistema de Suporte ao Usuário (SSU) é um projeto responsável pelo auxílio a pessoas com conhecimento básico em Informática!")
+    st.info("💾 Suas funções incluem Auxílio que ajudam desde o básico em desempenho de máquina através de: Limpeza de Arquivos Temporários, Logs, e Lixeira á Ajustes de conexão a Rede Internet com Reinício de Cache DNS, e até mesmo Manutenção avançada usando comandos DISM.")
+    st.info("🤔Comece utilizando nosso auxilio de Anamnese Guiada, afim de receber orientações básicas e então partimos para tratativa de seu problema!")
+    st.info("🏢O projeto atualmente encontra-se em estado Alfa (Testes Internos), é um desenvolvimento responsável com único intuito de ajudar as pessoas a solucionarem seus problemas diários, oferecendo otimização e solução prático em minutos de uso!!")
     st.markdown('</div>', unsafe_allow_html=True)
 
 # =====================
@@ -90,7 +91,7 @@ with abas[0]:
 with abas[1]:
     st.markdown('<div class="section">', unsafe_allow_html=True)
 
-    st.subheader("🧠 Diagnóstico Guiado do Sistema")
+    st.subheader("🧪 Anamnese Guiada")
 
     st.write("Responda às perguntas para receber recomendações automáticas.")
 
@@ -222,11 +223,15 @@ with abas[4]:
     col1, col2 = st.columns(2)
 
     with col1:
-        botao("🔧 SFC", sfc)
+        botao("🔧Verificar possíveis arquivos corrompidos e substituir automaticamente (DISM)", sfc)
 
     with col2:
-        botao("🛠 DISM", dism)
-
+        botao("🛠 Corrigir Imagem do Windows (DISM)", dism)
+        
+    st.info("O que é IMAGEM do WIndows? Pense como uma Foto do estado atual do Sistema Operacional.")
+    st.info("Em caso de urgência, você pode formatar seu computador usando esta imagem exatamente o estado em que está, com seus arquivos de fotos, vídeos, programas, etc.")
+    st.info("Modo de uso: Use o DISM primeiro, para garantir que a fonte de reparo esteja boa, e o SFC posteriormente para aplicar o conserto dos arquivos!")
+    st.info("Quando usar: Janelas travando ou fechando sozinha. Mensagem de erro de arquivos (.dll ausente). Menu Iniciar ou Barra de Tarefas não respondem. Erro de atualização do Windows. Infecção de Vírus. Até mesmo em Tela Azul BSOD.")
     st.markdown('</div>', unsafe_allow_html=True)
 
 # =====================
