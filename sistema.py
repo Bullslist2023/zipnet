@@ -1,22 +1,45 @@
-import platform
+import streamlit as st
+import streamlit.components.v1 as components
 
-def get_windows_info():
-    sistema = platform.system()
 
-    info = {
-        "sistema": sistema,
-        "arquitetura": platform.machine(),
-        "processador": platform.processor()
-    }
+def user_info_html():
 
-    if sistema != "Windows":
-        info["mensagem"] = "Informações avançadas disponíveis apenas no Windows"
-        return info
+    return """
+    <html>
+    <body style="font-family:Arial;">
 
-    try:
-        import psutil
-        info["ram_total_gb"] = round(psutil.virtual_memory().total / (1024**3), 2)
-    except:
-        info["ram_total_gb"] = "N/A"
+    <h3>📊 Informações do seu dispositivo</h3>
 
-    return info
+    <p id="os"></p>
+    <p id="browser"></p>
+    <p id="screen"></p>
+    <p id="lang"></p>
+    <p id="tz"></p>
+
+    <script>
+
+        document.getElementById("os").innerHTML =
+            "🖥 Sistema: " + navigator.platform;
+
+        document.getElementById("browser").innerHTML =
+            "🌐 Navegador: " + navigator.userAgent;
+
+        document.getElementById("screen").innerHTML =
+            "📺 Resolução: " + screen.width + "x" + screen.height;
+
+        document.getElementById("lang").innerHTML =
+            "🌍 Idioma: " + navigator.language;
+
+        document.getElementById("tz").innerHTML =
+            "⏰ Fuso: " + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    </script>
+
+    </body>
+    </html>
+    """
+
+
+st.title("Diagnóstico do Usuário")
+
+components.html(user_info_html(), height=300)
