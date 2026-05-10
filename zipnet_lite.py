@@ -6,14 +6,13 @@
 
 # Importações das bibliotecas
 import os
-import streamlit as st # #importando streamlit com apelido para simplificar a chamada
-import shutil # P/ manipulação de pastas
-import tempfile # P/ arquivo temporário
-import subprocess # P/ comando do sistema
-import time # Pausa e tempo
-import pathlib # Caminhos modernos
+import streamlit as st  # importando streamlit com apelido para simplificar a chamada
+import shutil  # P/ manipulação de pastas
+import tempfile  # P/ arquivo temporário
+import subprocess  # P/ comando do sistema
+import time  # Pausa e tempo
+import pathlib  # Caminhos modernos
 
-# Organizando o esqueleto do app
 # Organizando o esqueleto do app
 import streamlit as st
 
@@ -55,12 +54,12 @@ def botao(label, func, tipo="default"):
 
     if st.button(label):
         with st.spinner("Executando..."):
-            resultado = func()  # 👈 agora captura retorno da função
+            resultado = func()
 
             st.success(f"{label} concluído!")
 
             if resultado:
-                st.info(resultado)  # 👈 mostra resposta (erro ou sucesso)
+                st.info(resultado)
 
     if tipo in ["green", "yellow"]:
         st.markdown('</div>', unsafe_allow_html=True)
@@ -68,15 +67,14 @@ def botao(label, func, tipo="default"):
 # ABAS
 abas = st.tabs([
     "📘 Como funciona",
+    "🧠 Diagnóstico Guiado",
     "🧹 Limpeza",
     "🌐 Rede",
-    "🧪 Diagnóstico",
     "⚙️ Avançado"
 ])
 
 # =====================
 # COMO FUNCIONA
-# st.write escreve textos e st.info escreve textos em formatos
 # =====================
 with abas[0]:
     st.markdown('<div class="section">', unsafe_allow_html=True)
@@ -87,13 +85,99 @@ with abas[0]:
     st.markdown('</div>', unsafe_allow_html=True)
 
 # =====================
-# LIMPEZA
+# DIAGNÓSTICO GUIADO (NOVA ABA PRINCIPAL)
 # =====================
 with abas[1]:
     st.markdown('<div class="section">', unsafe_allow_html=True)
 
+    st.subheader("🧠 Diagnóstico Guiado do Sistema")
+
+    st.write("Responda às perguntas para receber recomendações automáticas.")
+
+    problema = st.selectbox(
+        "1️⃣ Qual problema você está enfrentando?",
+        ["Lentidão", "Internet", "Travamentos"]
+    )
+
+    inicio = st.selectbox(
+        "2️⃣ Quando o problema começou?",
+        ["Hoje / recentemente", "Após atualização recente", "Não sei"]
+    )
+
+    impacto = st.selectbox(
+        "3️⃣ O problema afeta:",
+        ["Apenas um aplicativo", "Alguns programas", "Sistema todo lento"]
+    )
+
+    conexao = st.selectbox(
+        "4️⃣ Sua conexão de internet:",
+        ["Normal", "Lenta", "Wi-Fi instável", "Sem internet"]
+    )
+
+    tempo_uso = st.selectbox(
+        "5️⃣ Há quanto tempo você não reinicia o computador?",
+        ["Hoje / recentemente", "1 a 3 dias", "Mais de 3 dias", "Não sei"]
+    )
+
+    if st.button("🔎 Gerar diagnóstico"):
+
+        acoes = []
+
+        if problema == "Lentidão":
+            acoes += [
+                "🧹 Limpar arquivos temporários",
+                "🌐 Flush DNS",
+                "🔄 Reiniciar sistema"
+            ]
+
+            if impacto == "Sistema todo lento":
+                acoes += [
+                    "🛠 SFC /scannow",
+                    "🧩 DISM RestoreHealth"
+                ]
+
+        if problema == "Internet":
+            acoes += [
+                "🌐 Reset de rede",
+                "🔄 Renovar IP",
+                "🧠 Flush DNS"
+            ]
+
+        if tempo_uso == "Mais de 3 dias":
+
+            st.warning("🔄 Recomendação importante")
+
+            st.info("""
+🔄 REINICIAR é diferente de desligar.
+
+• REINICIAR:
+- Reinicia o Windows completamente
+- Limpa memória RAM
+- Reinicia serviços do sistema
+
+• DESLIGAR/LIGAR:
+- Pode usar Inicialização Rápida (Fast Startup)
+- Nem sempre limpa processos travados
+
+💡 Para lentidão e erros, reiniciar é mais eficaz.
+""")
+
+            acoes.insert(0, "🔄 Reiniciar o computador (alta prioridade)")
+
+        st.subheader("💡 Ações recomendadas:")
+
+        for acao in acoes:
+            st.write(acao)
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# =====================
+# LIMPEZA
+# =====================
+with abas[2]:
+    st.markdown('<div class="section">', unsafe_allow_html=True)
+
     st.subheader("🧹 Limpeza do Sistema")
-    st.write("Remova arquivos desnecessários e melhore o desempenho.")
 
     col1, col2 = st.columns(2)
 
@@ -105,25 +189,17 @@ with abas[1]:
         botao("🧹 Limpar Cache", limpar_cache)
         botao("⚡ Limpar Prefetch", limpar_prefetch)
 
-    st.write("---")
-
     botao("🚀 Limpeza Completa", limpeza_completa, "green")
-
-    st.info("A sessão Limpeza é responsável por realizar remoções de arquivos temporários, reduzindo a carga desnecessária, ajudando no tempo de resposta geral e na busca de arquivos!")
-    st.info("Os arquivos Cache ou Temporários podem ser causadores de Travamentos, Lentidões em programas ou portais Web, e até mesmo Bugs. ")
-    st.info("Realizando essas remoções, podem resolver problemas de bugs em portais Web e correções em erros de carregamentos. Auxiliando em ocasiões onde o ocorre lentidões sem motivos claros.")
-
 
     st.markdown('</div>', unsafe_allow_html=True)
 
 # =====================
 # REDE
 # =====================
-with abas[2]:
+with abas[3]:
     st.markdown('<div class="section">', unsafe_allow_html=True)
 
     st.subheader("🌐 Rede")
-    st.write("Corrija problemas de conexão.")
 
     col1, col2 = st.columns(2)
 
@@ -133,56 +209,8 @@ with abas[2]:
     with col2:
         botao("🔄 Renovar IP", renew_ip, "yellow")
 
-    st.info("A sessão de ajustes de Rede realiza ações através de correções em DNS e Renovação de IP (Recomendado para quem utiliza conexão DHCP - IPs distribuidos de forma automática pelo provedor de Rede Internet")
-    st.info("O DNS funciona como uma agenda em seu computador, se o DNS estiver desatualizado ou apontando para um servidor ruim, os sites podem ficar mais lentos ou não carregar. Então, a ação de limpeza, força a realização de uma nova consulta DNS, agora mais rápida e correta!")
-    st.info("Por sua vez, a Renovação de IP resolve conflitos causados por dois dispositivos na mesma rede usando o mesmo IP, assim causando lentidão de internet, ou mesmo quedas de conexão. Ideal para que utiliza conexão DHCP, onde o provedor distribui IPs aos dispositivos automaticamente. Falhas: Conectado sem Internet e Rede instável são corrigidas.")
-    st.info("Dentre este cenário, esta sessão resolve problemas de Comunicação com a Internet!")
-
     st.markdown('</div>', unsafe_allow_html=True)
 
-# =====================
-# DIAGNÓSTICO
-# =====================
-with abas[3]:
-    st.markdown('<div class="section">', unsafe_allow_html=True)
-
-    st.subheader("🧪 Diagnóstico do Sistema - Informações Básicas de seu Computador")
-
-    # 🔥 pega dados do sistema
-    info = get_windows_info()
-
-    # 🔍 DEBUG VISUAL (ESSENCIAL)
-    st.write("📦 Dados brutos retornados:")
-    st.json(info)
-
-    st.write("---")
-
-    # 🧠 caso não seja dict, evita quebra
-    if not isinstance(info, dict):
-        st.error("Erro: get_windows_info() não está retornando um dicionário válido.")
-        st.write(info)
-
-    else:
-        # 🖥️ SISTEMA
-        st.markdown("### 🖥️ Sistema Operacional")
-
-        st.success(f"Sistema: {info.get('sistema', 'N/A')}")
-        st.info(f"Edição do Sistema Operacional: {info.get('edicao_windows', 'N/A')}")
-        st.info(f"Versão: {info.get('versao', 'N/A')}")
-        st.warning(f"Release: {info.get('release', 'N/A')}")
-
-        st.write("---")
-
-        # ⚙️ HARDWARE
-        st.markdown("### ⚙️ Hardware")
-
-        st.success(f"Arquitetura: {info.get('arquitetura', 'N/A')}")
-        st.info(f"Processador: {info.get('processador', 'N/A')}")
-        ram = info.get("ram_total_gb", "N/A")
-        st.success(f"RAM Total da Máquina: {ram} GB")
-
-
-    st.markdown('</div>', unsafe_allow_html=True)
 # =====================
 # AVANÇADO
 # =====================
@@ -194,27 +222,19 @@ with abas[4]:
     col1, col2 = st.columns(2)
 
     with col1:
-        botao("🔧 Verificar e substituir arquivos corrompidos do Windows", sfc)
+        botao("🔧 SFC", sfc)
 
     with col2:
-        botao("🛠 Reparar Imagem do Windows usando o Windows Update", dism)    
-        
-    st.info("O que é Imagem do Windows? Uma cópia exata de tudo no Hard Disk. É como uma Foto do estado atual do Sistema Operacional. Podendo ser utilizado em caso de formatação.")
-    st.info("Nesta sessão de conteúdos Avançados temos as ações SFC e DISM, ambas são ferramentas nativas do Windows para reparação do Sistema Operacional.")
-    st.info("A forma correta de execução: Verifica e substitui arquivos corrompidos, e em seguida executa a Reparação  de Imagem do Windows!")
-    st.info("Enquanto o SFC verifica arquivos essenciais do Windows, detecta Corrupção ou alterações e substitui automaticamente por versões corretas. O DISM repara a imagem do Windows, baixa arquivos corretos da Internet (Ou usa a mídia de instalação local) e permite que o SFC funcione corretamente depois.")
-    st.info("Por fim, o comando DISM conserta a fonte dos arquivos e o SFC conserta os arquivos em uso. Juntos restauram o sistema operacional para um estado saudável! Use apenas em casos emergentes, a ordem de uso é a ferramenta DISM em primeiro e o SFC por último.")
-    st.info("Impacta na estabilidade do sistema, tempo de resposta, travamentos e bugs, e em alguns casos na inicialização do sistema operacional!")
-    
+        botao("🛠 DISM", dism)
 
     st.markdown('</div>', unsafe_allow_html=True)
 
+# =====================
 # RODAPÉ
+# =====================
 st.markdown("""
 <div class="footer">
     <h3>⚡ ZIPNET - SISTEMA DE SUPORTE AO USUÁRIO</h3>
-    <p>Seu assistente de manutenção. Garanta a sua Tranquilidade, Performance, e Segurança Digital Básica com poucos passos!</p>
-</div>
-    <p>Envie o Feedback de sua experiência para contato (E-mail): juansantos227@outlook.com</p>
+    <p>Seu assistente de manutenção.</p>
 </div>
 """, unsafe_allow_html=True)
