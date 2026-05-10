@@ -19,7 +19,7 @@ import streamlit as st
 from utils import log, executar_com_progresso
 
 from rede import flush_dns, renew_ip, ping
-from sistema import get_windows_info
+#from sistema import get_windows_info
 from avancado import sfc, dism
 from styles import load_css
 
