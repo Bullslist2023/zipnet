@@ -1,22 +1,132 @@
-from system_utils import executar_comando
+# rede.py
 
+import subprocess
+import ctypes
+
+
+# =========================
+# VERIFICA ADMIN
+# =========================
+def is_admin():
+
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+
+    except Exception:
+        return False
+
+
+# =========================
+# EXECUTAR COMANDO
+# =========================
+def executar(comando):
+
+    try:
+
+        resultado = subprocess.run(
+            comando,
+            shell=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8"
+        )
+
+        return {
+            "sucesso": resultado.returncode == 0,
+            "codigo": resultado.returncode,
+            "saida": resultado.stdout.strip(),
+            "erro": resultado.stderr.strip()
+        }
+
+    except Exception as e:
+
+        return {
+            "sucesso": False,
+            "codigo": -1,
+            "saida": "",
+            "erro": str(e)
+        }
+
+
+# =========================
+# FLUSH DNS
+# =========================
 def flush_dns():
-    return executar_comando(
-        "ipconfig /flushdns",
-        "systemd-resolve --flush-caches",
-        "dscacheutil -flushcache"
+
+    return executar(
+        "ipconfig /flushdns"
     )
 
+
+# =========================
+# RENOVAR IP
+# =========================
 def renew_ip():
-    return executar_comando(
-        "ipconfig /renew",
-        "dhclient",
-        None
+
+    if not is_admin():
+
+        return {
+            "sucesso": False,
+            "erro": (
+                "Execute o programa como administrador"
+            )
+        }
+
+    comando = (
+        "ipconfig /release && "
+        "timeout /t 3 > nul && "
+        "ipconfig /renew"
     )
 
-def ping():
-    return executar_comando(
-        "ping google.com -n 4",
-        "ping -c 4 google.com",
-        "ping -c 4 google.com"
+    return executar(comando)
+
+
+# =========================
+# PING
+# =========================
+def ping(host="google.com"):
+
+    return executar(
+        f"ping {host} -n 4"
     )
+
+
+# =========================
+# RESET REDE
+# =========================
+def reset_rede():
+
+    if not is_admin():
+
+        return {
+            "sucesso": False,
+            "erro": (
+                "Execute o programa como administrador"
+            )
+        }
+
+    comando = (
+        "netsh winsock reset && "
+        "netsh int ip reset && "
+        "ipconfig /flushdns"
+    )
+
+    return executar(comando)
+
+
+# =========================
+# TESTE DIRETO
+# =========================
+if __name__ == "__main__":
+
+    print("=== FLUSH DNS ===")
+    print(flush_dns())
+
+    print("\n=== RENEW IP ===")
+    print(renew_ip())
+
+    print("\n=== PING ===")
+    print(ping())
+
+    print("\n=== RESET REDE ===")
+    print(reset_rede())
